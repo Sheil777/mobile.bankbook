@@ -1,0 +1,24 @@
+.nbp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+
+    p {
+        font-size: 28px;
+        height: auto;
+        text-align: center;
+    }
+
+    a {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 800px) {
+    .nbp {
+        justify-content: start;
+        height: auto;
+    }
+}

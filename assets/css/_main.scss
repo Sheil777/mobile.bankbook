@@ -1,0 +1,42 @@
+
+
+.add-category {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 0;
+    overflow: hidden;
+    width: 100%;
+    transition: all 0.5s;
+
+    &.visible {
+        height: 50px;
+    }
+
+    &__icon {
+        margin-right: 10px;
+        img {
+            width: 30px;
+        }
+    }
+
+    &__text {
+        color: gray;
+        font-size: 20px;
+    }
+}
+
+
+.bank__add-category,
+.bank__delete,
+.category__delete,
+.category__edit,
+.bank__category_addCategory {
+    cursor: pointer;
+}
+
+.button-edit__toggle,
+.button-edit__edit,
+.button-edit__newBank {
+    cursor: pointer;
+}
