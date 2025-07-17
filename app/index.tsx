@@ -1,20 +1,10 @@
-import { Text, View, Image } from "react-native";
+import Category from "@/components/Category";
+import { Text, View, Image, StyleSheet } from "react-native";
 
 export default function Index() {
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "flex-start",
-        alignItems: "center",
-      }}
-    >
-      <View 
-        style={{
-          width: '85%',
-          marginTop: 10,
-        }}
-      >
+    <View style={styles.container} >
+      <View style={styles.header} >
         <Image 
           source={require('../assets/images/logo.png')}
           style={{
@@ -23,7 +13,28 @@ export default function Index() {
           resizeMode="contain"
         />
       </View>
-      <Text>Edit app/index.tsx to edit this screen.</Text>
+      <Category img={require('../assets/images/icons/tbank.png')}>
+        New Category
+      </Category>
+      <Category img={require('../assets/images/icons/tbank.png')}>
+        New Category fdsa fasd fasdf asd faydf asd fsdf ads fs
+      </Category>
+      <Category img={require('../assets/images/icons/tbank.png')}>
+        New Category fdsa fasd fasdf asd fasdf asd fsdf ads fsffas fasd fs
+      </Category>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  header: {
+    width: '85%',
+    marginTop: 10,
+  },
+
+})
