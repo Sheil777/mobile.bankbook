@@ -5,6 +5,8 @@ type CategoryProps = {
     backgroundImage?: string;
     img: ImageSourcePropType;
     children: string;
+    editing?: boolean;
+    added?: boolean;
 }
 
 const Category: React.FC<CategoryProps> = ({isActive = true, backgroundImage, img, children}) => {
@@ -32,14 +34,13 @@ const styles = StyleSheet.create({
         minHeight: 50,
         borderBottomWidth: 1,
         borderBottomColor: "black",
-        gap: 10,
         paddingHorizontal: 10,
     },
     noActive: {
         backgroundColor: "#c2c2c2",
     },
     imageContainer: {
-
+        marginRight: 10,
     },
     image: {
         height: 35,
@@ -50,8 +51,6 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
     },
     text: {
-        flex: 1,
-        flexShrink: 1,
         fontSize: 20,
     }
 })
