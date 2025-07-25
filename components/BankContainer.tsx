@@ -8,10 +8,11 @@ type BankContainerProps = {
     backgroundColor: string;
     color: string;
     // emptyBank: boolean;
+    isEditing: boolean;
     children: React.ReactNode;
 }
 
-const BankContainer: React.FC<BankContainerProps> = ({title, backgroundColor, color, children}) => {
+const BankContainer: React.FC<BankContainerProps> = ({title, backgroundColor, color, isEditing, children}) => {
     return (
         <View style={styles.container}>
             <View style={[styles.header, { backgroundColor }]}>
@@ -22,10 +23,13 @@ const BankContainer: React.FC<BankContainerProps> = ({title, backgroundColor, co
             <View style={styles.categories}>
                 {children}
             </View>
-            <View style={styles.addCategory}>
-                <PlusIcon width={30} height={30} ></PlusIcon>
-                <Text style={styles.addCategoryText}>Добавить</Text>
-            </View>
+            { isEditing ?
+                <View style={styles.addCategory}>
+                    <PlusIcon width={30} height={30} ></PlusIcon>
+                    <Text style={styles.addCategoryText}>Добавить</Text>
+                </View>
+                : null
+            }
         </View>
     )
 }
