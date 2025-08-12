@@ -21,6 +21,8 @@ interface HomeScreenProps {
   route: HomeScreenRouteProp;
 }
 
+
+
 function HomeScreen({ route }: HomeScreenProps ) {
   const isEditing = route.params?.isEditing || false;
   const setIsEditing = route.params?.setIsEditing || (() => {})
