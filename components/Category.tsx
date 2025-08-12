@@ -1,15 +1,18 @@
 import { View, Text, Image, ImageSourcePropType, StyleSheet } from "react-native"
+import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "@/constants/ui";
+
 
 type CategoryProps = {
     isActive?: boolean;
     backgroundImage?: string;
     img: ImageSourcePropType;
     children: string;
-    editing?: boolean;
+    isEditing?: boolean;
     added?: boolean;
 }
 
-const Category: React.FC<CategoryProps> = ({isActive = true, backgroundImage, img, children}) => {
+const Category: React.FC<CategoryProps> = ({isActive = true, backgroundImage, img, children, isEditing = false}) => {
     return (
         <View style={[styles.container, !isActive ? styles.noActive : null ]}>
             <View style={[
@@ -21,6 +24,11 @@ const Category: React.FC<CategoryProps> = ({isActive = true, backgroundImage, im
             <View style={styles.textWrapper}>
                 <Text style={styles.text}>{children}</Text>
             </View>
+            { isEditing &&
+                <View style={styles.buttos}>
+                    <Ionicons name="trash-outline" size={24} color={COLORS.GRAY_COLOR} />
+                </View>
+            }
         </View>
     )
 }
@@ -47,11 +55,15 @@ const styles = StyleSheet.create({
         width: 35,
     },
     textWrapper: {
+        width: '100%',
         flexShrink: 1,
         paddingVertical: 5,
     },
     text: {
         fontSize: 20,
+    },
+    buttos: {
+        paddingHorizontal: 10,
     }
 })
 

@@ -3,7 +3,7 @@ import Category from "@/components/Category";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer, RouteProp } from "@react-navigation/native";
 import { useState } from "react";
-import { Text, View, Image, StyleSheet, Modal, Button } from "react-native";
+import { Text, View, Image, StyleSheet, Modal, Button, TouchableWithoutFeedback } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/ui";
 import React from "react";
@@ -39,25 +39,29 @@ function HomeScreen({ route }: HomeScreenProps ) {
         />
       </View>
       <BankContainer title="Тинькофф" backgroundColor="yellow" color="black" isEditing={isEditing}>
-        <Category img={require('@/assets/images/icons/tbank.png')}>
+        <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
           New Category
         </Category>
-        <Category img={require('@/assets/images/icons/tbank.png')}>
+        <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
           New Category fdsa fasd fasdf asd faydf asd fsdf ads fs
         </Category>
-        <Category img={require('@/assets/images/icons/tbank.png')}>
-          New Category fdsa fasd fasdf asd fasdf asd fsdf ads fsffas fasd fs
+        <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
+          New Category fdsa fasd fasdf asd fasdf asd ads fsffas fasd fs
         </Category>
       </BankContainer>
 
       {/* Попап */}
-      <Modal visible={isPopupVisible} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text>Это попап!</Text>
-            <Button title="Закрыть" onPress={() => setIsPopupVisible(false)} />
+      <Modal visible={isPopupVisible} transparent animationType="slide" statusBarTranslucent={true}>
+        <TouchableWithoutFeedback onPress={() => setIsPopupVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+              <View style={styles.modalContent}>
+                <Text>Это попап!</Text>
+                <Button title="Закрыть" onPress={() => setIsPopupVisible(false)} />
+              </View>
+            </TouchableWithoutFeedback>
           </View>
-        </View>
+        </TouchableWithoutFeedback>
       </Modal>
     </View>
   );
@@ -130,6 +134,7 @@ export default function Index() {
         }}
       />
 
+      {/* Попап */}
       <Tab.Screen
         name="Popup"
         children={() => (
