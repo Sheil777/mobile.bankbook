@@ -1,12 +1,15 @@
 import BankContainer from "@/components/BankContainer";
 import Category from "@/components/Category";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer, RouteProp } from "@react-navigation/native";
-import { useState } from "react";
-import { Text, View, Image, StyleSheet, Modal, Button, TouchableWithoutFeedback } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/constants/ui";
-import React from "react";
+import { Ionicons } from "@expo/vector-icons";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { RouteProp } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { Button, Image, Modal, ScrollView, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+
+// import { CategoryService } from '../database';
+import { initDatabase } from '../database/db.init';
+import { Categories } from '../database/categories'
 
 type HomeScreenRouteProp = RouteProp<{
   Home: {
@@ -29,43 +32,82 @@ function HomeScreen({ route }: HomeScreenProps ) {
   const isPopupVisible = route.params?.isPopupVisible || false;
   const setIsPopupVisible = route.params?.setIsPopupVisible || (() => {})
 
-  return (
-    <View style={styles.container} >
-      <View style={styles.header} >
-        <Image 
-          source={require('../assets/images/logo.png')}
-          style={{
-            width: '100%',
-          }}
-          resizeMode="contain"
-        />
-      </View>
-      <BankContainer title="Тинькофф" backgroundColor="yellow" color="black" isEditing={isEditing}>
-        <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
-          New Category
-        </Category>
-        <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
-          New Category fdsa fasd fasdf asd faydf asd fsdf ads fs
-        </Category>
-        <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
-          New Category fdsa fasd fasdf asd fasdf asd ads fsffas fasd fs
-        </Category>
-      </BankContainer>
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-      {/* Попап */}
-      <Modal visible={isPopupVisible} transparent animationType="slide" statusBarTranslucent={true}>
-        <TouchableWithoutFeedback onPress={() => setIsPopupVisible(false)}>
-          <View style={styles.modalOverlay}>
-            <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-              <View style={styles.modalContent}>
-                <Text>Это попап!</Text>
-                <Button title="Закрыть" onPress={() => setIsPopupVisible(false)} />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
-        </TouchableWithoutFeedback>
-      </Modal>
-    </View>
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        await initDatabase();
+        // await Categories.deleteAll()
+        const loadedCategories = await Categories.getAll();
+        setCategories(loadedCategories);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  return (
+    <ScrollView>
+      <View style={styles.container} >
+        <View style={styles.header} >
+          <Image 
+            source={require('../assets/images/logo.png')}
+            style={{
+              width: '100%',
+            }}
+            resizeMode="contain"
+          />
+        </View>
+        <BankContainer title="Тинькофф" backgroundColor="yellow" color="black" isEditing={isEditing}>
+          <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
+            New Category
+          </Category>
+          <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
+            New Category fdsa fasd fasdf asd faydf asd fsdf ads fs
+          </Category>
+          <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
+            New Category fdsa fasd fasdf asd fasdf asd ads fsffas fasd fs
+          </Category>
+        </BankContainer>
+
+        <BankContainer 
+          title="Тинькофф" 
+          backgroundColor="yellow" 
+          color="black" 
+          isEditing={isEditing}
+        >
+          {categories.map(category => (
+            <Category 
+              key={category.id}
+              img={category.image ? { uri: category.image } : require('@/assets/images/icons/tbank.png')}
+              isEditing={isEditing}
+            >
+              {category.name}
+            </Category>
+          ))}
+        </BankContainer>
+
+        {/* Попап */}
+        <Modal visible={isPopupVisible} transparent animationType="slide" statusBarTranslucent={true}>
+          <TouchableWithoutFeedback onPress={() => setIsPopupVisible(false)}>
+            <View style={styles.modalOverlay}>
+              <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+                <View style={styles.modalContent}>
+                  <Text>Это попап!</Text>
+                  <Button title="Закрыть" onPress={() => setIsPopupVisible(false)} />
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+      </View>
+    </ScrollView>
   );
 }
 

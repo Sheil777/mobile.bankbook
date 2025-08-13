@@ -13,5 +13,5 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "global.d.ts" // Добавьте эту строку, если используете global.d.ts в корне
-, "app/index.оsx"  ]
+, "app/index.оsx", "database/db.init.old.js"  ]
 }

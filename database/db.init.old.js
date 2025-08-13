@@ -57,26 +57,29 @@ export const initDatabase = () => {
         );
     });
 
-      // Проверяем и заполняем начальными данными
+// Проверяем и заполняем таблицу categories начальными данными
       tx.executeSql(
-        'SELECT COUNT(*) as count FROM users',
+        'SELECT COUNT(*) as count FROM categories',
         [],
         (_, { rows }) => {
           if (rows.item(0).count === 0) {
             // Заполняем начальными данными
-            const initialUsers = [
-              { name: 'Admin', email: 'admin@example.com' },
-              { name: 'User', email: 'user@example.com' }
+            const initialCategories = [
+              { name: 'Продукты', image: 'tbank.png', color: 'rgb(76, 175, 80)' },
+              { name: 'Транспорт', image: 'tbank.png', color: 'rgb(33, 150, 243)' },
+              { name: 'Развлечения', image: 'tbank.png', color: 'rgb(156, 39, 176)' },
+              { name: 'Кафе и рестораны', image: 'tbank.png', color: 'rgb(239, 108, 0)' },
+              { name: 'Здоровье', image: 'tbank.png', color: 'rgb(233, 30, 99)' }
             ];
 
-            initialUsers.forEach(user => {
+            initialCategories.forEach(category => {
               tx.executeSql(
-                'INSERT INTO users (name, email) VALUES (?, ?)',
-                [user.name, user.email]
+                'INSERT INTO categories (name, image, color) VALUES (?, ?, ?)',
+                [category.name, category.image, category.color]
               );
             });
 
-            console.log('Добавлены начальные пользователи');
+            console.log('Добавлены начальные категории');
           }
           resolve();
         },
