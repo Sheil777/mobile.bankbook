@@ -13,7 +13,7 @@ export const initDatabase = () => {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           name TEXT NOT NULL UNIQUE,
           color_bg TEXT DEFAULT 'white',
-          color_text TEXT DEFAULT 'black' 
+          color_text TEXT DEFAULT 'black',
           created_at DEFAULT CURRENT_TIMESTAMP
         );`,
         [],

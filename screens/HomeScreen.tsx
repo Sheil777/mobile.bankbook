@@ -5,6 +5,8 @@ import { ScrollView, View, Image, StyleSheet, Modal, TouchableWithoutFeedback, B
 import BankContainer from '@/components/BankContainer';
 import Category from '@/components/Category';
 import { CategoryType } from '@/types/category';
+import CurrentCategoriesTable from '@/database/currentCategories';
+import { BankType } from '@/types/bank';
 
 interface HomeScreenProps {
     isEditing: boolean;
@@ -19,7 +21,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
     isPopupVisible,
     setIsPopupVisible
 }) => {
-  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [currentCategories, setCurrentCategories] = useState<CategoryType[]>([]);
+  const [currentBanks, setCurrentBanks] = useState<BankType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,8 +30,10 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
       try {
         await initDatabase();
         // await Categories.deleteAll()
-        const loadedCategories = await Categories.getAll();
-        setCategories(loadedCategories);
+        const loadedCurrentCategories = await CurrentCategoriesTable.getByBankId(1);
+        const loadedCurrentBanks = await CurrentCategoriesTable.getSelectedBanks();
+        setCurrentBanks(loadedCurrentBanks);
+        setCurrentCategories(loadedCurrentCategories);
       } catch (error) {
         console.error('Error loading categories:', error);
       } finally {
@@ -51,34 +56,28 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
             resizeMode="contain"
           />
         </View>
-        <BankContainer title="Тинькофф" backgroundColor="yellow" color="black" isEditing={isEditing}>
-          <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
-            New Category
-          </Category>
-          <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
-            New Category fdsa fasd fasdf asd faydf asd fsdf ads fs
-          </Category>
-          <Category img={require('@/assets/images/icons/tbank.png')} isEditing={isEditing}>
-            New Category fdsa fasd fasdf asd fasdf asd ads fsffas fasd fs
-          </Category>
-        </BankContainer>
 
-        <BankContainer 
-          title="Тинькофф" 
-          backgroundColor="yellow" 
-          color="black" 
-          isEditing={isEditing}
-        >
-          {categories.map(category => (
-            <Category 
-              key={category.id}
-              img={category.image ? { uri: category.image } : require('@/assets/images/icons/tbank.png')}
+        {
+          currentBanks.map(bank => (
+            <BankContainer
+              key={bank.id}
+              title={bank.name}
+              backgroundColor={bank.color_bg}
+              color={bank.color_text}
               isEditing={isEditing}
             >
-              {category.name}
-            </Category>
-          ))}
-        </BankContainer>
+              {currentCategories.map(category => (
+                <Category 
+                  key={category.id}
+                  img={category.image ? { uri: category.image } : require('@/assets/images/icons/tbank.png')}
+                  isEditing={isEditing}
+                >
+                  {category.name}
+                </Category>
+              ))}
+            </BankContainer>
+          ))
+        }
 
         {/* Попап */}
         <Modal visible={isPopupVisible} transparent animationType="slide" statusBarTranslucent={true}>
