@@ -1,4 +1,4 @@
-import { CategoryType } from "@/types/category";
+import CategoryType from "@/types/category";
 import { getDatabase } from "./db.init";
 
 export const Categories = {

@@ -4,9 +4,8 @@ import { useEffect, useState } from 'react';
 import { ScrollView, View, Image, StyleSheet, Modal, TouchableWithoutFeedback, Button, Text } from 'react-native';
 import BankContainer from '@/components/BankContainer';
 import Category from '@/components/Category';
-import { CategoryType } from '@/types/category';
 import CurrentCategoriesTable from '@/database/currentCategories';
-import { BankType } from '@/types/bank';
+import CurrentCategoriesType from '@/types/currentCategories';
 
 interface HomeScreenProps {
     isEditing: boolean;
@@ -21,19 +20,15 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
     isPopupVisible,
     setIsPopupVisible
 }) => {
-  const [currentCategories, setCurrentCategories] = useState<CategoryType[]>([]);
-  const [currentBanks, setCurrentBanks] = useState<BankType[]>([]);
+  const [currentCategories, setCurrentCategories] = useState<CurrentCategoriesType[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         await initDatabase();
-        // await Categories.deleteAll()
-        const loadedCurrentCategories = await CurrentCategoriesTable.getByBankId(1);
-        const loadedCurrentBanks = await CurrentCategoriesTable.getSelectedBanks();
-        setCurrentBanks(loadedCurrentBanks);
-        setCurrentCategories(loadedCurrentCategories);
+        // await CurrentCategoriesTable.deleteAll()
+        setCurrentCategories(await CurrentCategoriesTable.getAll())
       } catch (error) {
         console.error('Error loading categories:', error);
       } finally {
@@ -58,23 +53,26 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
         </View>
 
         {
-          currentBanks.map(bank => (
+          currentCategories.map(bank => (
             <BankContainer
-              key={bank.id}
+              key={bank.bank_id}
               title={bank.name}
               backgroundColor={bank.color_bg}
               color={bank.color_text}
               isEditing={isEditing}
             >
-              {currentCategories.map(category => (
-                <Category 
-                  key={category.id}
-                  img={category.image ? { uri: category.image } : require('@/assets/images/icons/tbank.png')}
-                  isEditing={isEditing}
-                >
-                  {category.name}
-                </Category>
-              ))}
+              {
+              bank.categories &&
+                bank.categories.map(category => (
+                  <Category 
+                    key={category.category_id}
+                    img={category.image ? { uri: category.image } : require('@/assets/images/icons/tbank.png')}
+                    isEditing={isEditing}
+                  >
+                    {category.name}
+                  </Category>
+                ))
+              }
             </BankContainer>
           ))
         }

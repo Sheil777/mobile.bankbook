@@ -98,6 +98,7 @@ async function insertDefaultCurrentCategories() {
   const defaultCurrentCategories = [
     { bankId: 1, percent: 5, category_id: 1},
     { bankId: 1, percent: 7, category_id: 2},
+    { bankId: 2, percent: 0, category_id: 0},
   ];
 
   const categories = await db.getFirstAsync('SELECT COUNT(*) as count FROM current_categories')
