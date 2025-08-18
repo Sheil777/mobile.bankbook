@@ -9,7 +9,7 @@ const CurrentCategoriesTable = {
       for(let bank of currentCategories) {
         let categories = await CurrentCategoriesTable.getByBankId(bank.bank_id)
         
-        console.log(categories)
+        // console.log(categories)
 
         bank.categories = categories.length == 0 ? null : categories
       }

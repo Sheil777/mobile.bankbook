@@ -6,6 +6,7 @@ import BankContainer from '@/components/BankContainer';
 import Category from '@/components/Category';
 import CurrentCategoriesTable from '@/database/currentCategories';
 import CurrentCategoriesType from '@/types/currentCategories';
+import ModalAddBank from '@/components/popups/ModalAddBank';
 
 interface HomeScreenProps {
     isEditing: boolean;
@@ -22,6 +23,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
 }) => {
   const [currentCategories, setCurrentCategories] = useState<CurrentCategoriesType[]>([]);
   const [loading, setLoading] = useState(true);
+  const closeModalAddBank = () => { setIsPopupVisible(false) }
 
   useEffect(() => {
     const loadData = async () => {
@@ -78,18 +80,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
         }
 
         {/* Попап */}
-        <Modal visible={isPopupVisible} transparent animationType="slide" statusBarTranslucent={true}>
-          <TouchableWithoutFeedback onPress={() => setIsPopupVisible(false)}>
-            <View style={styles.modalOverlay}>
-              <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
-                <View style={styles.modalContent}>
-                  <Text>Это попап!</Text>
-                  <Button title="Закрыть" onPress={() => setIsPopupVisible(false)} />
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
+        <ModalAddBank isPopupVisible={isPopupVisible} onClose={closeModalAddBank} />
+
       </View>
     </ScrollView>
   );
@@ -106,18 +98,6 @@ const styles = StyleSheet.create({
     width: '85%',
     marginTop: 10,
     aspectRatio: 4
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    width: '80%',
   },
 })
 
