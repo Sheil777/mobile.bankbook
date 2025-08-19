@@ -41,6 +41,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
     loadData();
   }, []);
 
+  // function addBankOnHomeScreen(id: number) {
+
+  // }
+  
+  const removeBank = async (id: number) => {
+    await initDatabase()
+    if(await CurrentCategoriesTable.removeBank(id))
+      setCurrentCategories(currentCategories.filter(bank => bank.bank_id !== id))
+  }
+
   return (
     <ScrollView>
       <View style={styles.container} >
@@ -58,10 +68,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
           currentCategories.map(bank => (
             <BankContainer
               key={bank.bank_id}
+              id={bank.bank_id}
               title={bank.name}
               backgroundColor={bank.color_bg}
               color={bank.color_text}
               isEditing={isEditing}
+              removeBank={removeBank}
             >
               {
               bank.categories &&

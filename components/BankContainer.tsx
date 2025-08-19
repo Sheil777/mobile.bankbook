@@ -1,8 +1,13 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import PlusIcon from "@/assets/images/icons/plus.svg"
+import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "@/constants/ui";
+import { initDatabase } from "@/database/db.init";
+import CurrentCategoriesTable from "@/database/currentCategories";
 
 type BankContainerProps = {
+  id: number;
   title: string;
   // editing: boolean;
   backgroundColor: string;
@@ -10,15 +15,24 @@ type BankContainerProps = {
   // emptyBank: boolean;
   isEditing: boolean;
   children?: React.ReactNode;
+  removeBank: (id: number) => void;
 }
 
-const BankContainer: React.FC<BankContainerProps> = ({title, backgroundColor, color, isEditing, children}) => {
+const BankContainer: React.FC<BankContainerProps> = ({id, title, backgroundColor, color, isEditing, children, removeBank}) => {
   return (
     <View style={styles.container}>
       <View style={[styles.header, { backgroundColor }]}>
         <Text style={[styles.headerText, { color }]}>
           {title}
         </Text>
+        {
+          isEditing && 
+          <TouchableOpacity style={styles.buttonDelete} onPress={() => removeBank(id)}>
+            <View >
+              <Ionicons name="trash-outline" size={24} color={COLORS.GRAY_COLOR} />
+            </View>
+          </TouchableOpacity>
+        }
       </View>
       <View style={styles.categories}>
         {children}
@@ -60,6 +74,16 @@ const styles = StyleSheet.create({
   addCategoryText: {
       color: 'gray',
       fontSize: 20,
+  },
+  buttonDelete: {
+    position: 'absolute',
+    right: 18,
+    backgroundColor: 'white',
+    borderRadius: 5,
+    height: 30,
+    width: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 })
 

@@ -20,6 +20,7 @@ const CurrentCategoriesTable = {
       throw error;
     }
   },
+
   getByBankId: async (bankId: number) => {
     try {
       let db = getDatabase()
@@ -40,6 +41,7 @@ const CurrentCategoriesTable = {
       throw error;
     }
   },
+
   getSelectedBanks: async () => {
     try {
       let db = getDatabase()
@@ -54,6 +56,29 @@ const CurrentCategoriesTable = {
       `);
     } catch (error) {
       console.error('Error loading selected banks:', error);
+      throw error;
+    }
+  },
+
+  addBank: async (bankId: number) => {
+    try {
+      let db = getDatabase()
+      return await db.runAsync(
+          `INSERT INTO current_categories (bank_id, percent, category_id) VALUES (?, ?, ?);`,
+          [bankId, 0, 0]
+        );
+    } catch (error) {
+      console.error('Error added bank in current category:', error);
+      throw error;
+    }
+  },
+
+  removeBank: async (id: number) => {
+    try {
+      let db = getDatabase()
+      return await db.runAsync(`DELETE FROM current_categories WHERE bank_id = ${id}`)
+    } catch (error) {
+      console.error('Error deleting bank in current categories:', error);
       throw error;
     }
   },

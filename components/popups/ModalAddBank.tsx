@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import BanksTable from "@/database/banks";
 import { initDatabase } from "@/database/db.init";
 import { BankType } from "@/types/bank";
+import CurrentCategoriesTable from "@/database/currentCategories";
 
 interface Popup {
-  isPopupVisible: boolean,
-  onClose: () => void
+  isPopupVisible: boolean;
+  onClose: () => void;
 }
 
 const ModalAddBank:React.FC<Popup> = ({
@@ -24,20 +25,27 @@ const ModalAddBank:React.FC<Popup> = ({
     }
 
     loadData()
-  }, [])
+  }, [isPopupVisible])
+
+  async function addBank(id: number) {
+    if(await CurrentCategoriesTable.addBank(id)){
+      setBanks(prevBanks => prevBanks.filter(bank => bank.id !== id))
+      // addBankOnHomeScreen(id)
+    }
+  }
 
   return (
     <StyledModal isOpen={isPopupVisible} onClose={onClose}>
       {
         banks.map((bank) => (
-          <TouchableOpacity key={bank.id} onPress={() => console.log(bank.name)}>
+          <TouchableOpacity key={bank.id} onPress={() => addBank(bank.id)}>
             <View style={[styles.bankContainer, {backgroundColor: bank.color_bg}]}>
               <Text style={[styles.bankName, {color: bank.color_text}]}>{bank.name}</Text>
             </View>
           </TouchableOpacity>
         ))
       }
-      <Button title="Закрыть" onPress={onClose} />
+      {/* <Button title="Закрыть" onPress={onClose} /> */}
     </StyledModal>
   )
 }
